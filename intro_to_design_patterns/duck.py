@@ -5,19 +5,24 @@ import abc
 class Duck(object):
     def __init__(self, name):
         self.name = name
-        self.quack_behavior = QuackBehavior()
-        self.fly_behaviour = FlyBehavior()
+        self._quack_behavior = QuackBehavior()
+        self._fly_behavior = FlyBehavior()
 
     def perform_quack(self):
         """Set a value in the instance."""
-        QuackBehavior.quack()
+        self._quack_behavior.quack()
         return
 
     def perform_fly(self):
         """Set a value in the instance."""
-        FlyBehavior.fly()
+        self._fly_behavior.fly()
         return
 
+    def set_quack_behavior(self, qb):
+        self._quack_behavior = qb
+
+    def set_fly_behavior(self, fb):
+        self._fly_behavior = fb
 
     def swim(self):
         """Get and return a value from the instance."""
@@ -27,6 +32,7 @@ class Duck(object):
         print(self.name)
         """Get and return a value from the instance."""
         return
+
 
 
 class QuackBehavior(object):
@@ -76,14 +82,21 @@ class FlyWithWings(FlyBehavior):
         print("Flyin With Wings!!!")
 
 
-class RedheadDuck(Duck):
-    def perform_fly(self):
-        FlyWithWings.fly()
+class FlyRocketPowered(FlyBehavior):
+    @classmethod
+    def fly(cls):
+        print("I'm flying with a Rocket!!!")
 
-    def perform_quack(self):
-        Quack.quack()
+
+class RedheadDuck(Duck):
+    def __init__(self, name):
+        super(RedheadDuck, self).__init__(name)
+        self.set_fly_behavior(FlyWithWings())
+        self.set_quack_behavior(Quack())
 
 if __name__ == "__main__":
     my_red_duck = RedheadDuck('Bruno')
     my_red_duck.perform_quack()
+    my_red_duck.perform_fly()
+    my_red_duck.set_fly_behavior(FlyRocketPowered())
     my_red_duck.perform_fly()

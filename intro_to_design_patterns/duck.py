@@ -34,7 +34,6 @@ class Duck(object):
         return
 
 
-
 class QuackBehavior(object):
     __metaclass__ = abc.ABCMeta
 
@@ -64,6 +63,7 @@ class MuteQuack(QuackBehavior):
 
 class FlyBehavior(object):
     __metaclass__ = abc.ABCMeta
+
     @classmethod
     @abc.abstractmethod
     def fly(cls):
@@ -94,9 +94,15 @@ class RedheadDuck(Duck):
         self.set_fly_behavior(FlyWithWings())
         self.set_quack_behavior(Quack())
 
+
 if __name__ == "__main__":
     my_red_duck = RedheadDuck('Bruno')
     my_red_duck.perform_quack()
     my_red_duck.perform_fly()
     my_red_duck.set_fly_behavior(FlyRocketPowered())
     my_red_duck.perform_fly()
+
+    test_duck = RedheadDuck("John")
+    test_duck.set_quack_behavior(Squeak())
+    test_duck.perform_quack()
+

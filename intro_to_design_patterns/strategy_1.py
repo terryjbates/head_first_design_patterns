@@ -105,4 +105,5 @@ if __name__ == "__main__":
     test_duck = RedheadDuck("John")
     test_duck.set_quack_behavior(Squeak())
     test_duck.perform_quack()
+    
 

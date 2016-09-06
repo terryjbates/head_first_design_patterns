@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import itertools
 
 
+=======
+#!/usr/bin/env python3
+import itertools
+
+>>>>>>> 77cd2a230ac6bc8a29d5b9e91df7dd1f7b026636
 class Subject(object):
     def __init__(self):
         self.__observers = set()

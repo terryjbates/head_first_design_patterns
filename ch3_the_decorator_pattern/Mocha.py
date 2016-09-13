@@ -24,7 +24,7 @@ class Mocha(condi_deco):
     @description.setter
     def description(self, value):
         self._description = value
-    
+
     def set_beverage(self, input_bev):
         if isinstance(input_bev, Beverage):
             self._beverage = input_bev

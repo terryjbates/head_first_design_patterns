@@ -27,7 +27,7 @@ class NYCPizzaStore(PizzaStore):
     def create_pizza(self, pizza_type):
         if pizza_type == "cheese":
             pizza = CheesePizza(self.ingredient_factory)
-            pizza.name("NY Style Pizza")
+            pizza.name = "NY Style Pizza"
             return pizza
         elif pizza_type == "pepperoni":
             return NYCPepperoniPizza()
@@ -62,6 +62,7 @@ class Pizza(object):
     @name.setter
     def name(self, new_name):
         self._name = new_name
+
     @property
     def type(self):
         return self._type
@@ -95,9 +96,9 @@ class CheesePizza(Pizza):
 
     def prepare(self):
         print("Preparing {}".format(self.name))
-        self.dough = self.ingredient_factory.create_dough()
-        self.sauce = self.ingredient_factory.create_sauce()
-        self.cheese = self.ingredient_factory.create_cheese()
+        self.dough = self.ingredient_factory.create_dough(self.ingredient_factory())
+        self.sauce = self.ingredient_factory.create_sauce(self.ingredient_factory())
+        self.cheese = self.ingredient_factory.create_cheese(self.ingredient_factory())
 
 
 class PizzaIngredientFactory(object):
@@ -141,8 +142,6 @@ class NYPizzaIngredientFactory(object):
         return FreshClams()
 
 
-
-
 class Dough(object):
     def __call__(self):
         return "Plain Dough"
@@ -173,33 +172,47 @@ class MarinaraSauce(Sauce):
         return "Marinara sauce"
 
 
+
 class Veggie(object):
     def __call_(self):
         return "Avocado"
 
-#Garlic(), Onion(), Mushroom(), RedPepper()
+
+class Veggies(object):
+    def __call__(self):
+        return [Garlic(), Onion(), Mushroom(), RedPepper()]
+
+class Garlic(Veggie):
+    def __call_(self):
+        return "Garlic"
+
+
+class Onion(Veggie):
+    def __call_(self):
+        return "Onion"
+
+
+class Mushroom(Veggie):
+    def __call_(self):
+        return "Mushroom"
+
+
+class RedPepper(Veggie):
+    def __call_(self):
+        return "Red Pepper"
+
 
 class Garlic(Veggie):
     def __call_(self):
         return "Stank breath"
 
-class Garlic(Veggie):
-    def __call_(self):
-        return "Stank breath"
 
-class Garlic(Veggie):
-    def __call_(self):
-        return "Stank breath"
+class Clam(object):
+    def __call__(self):
+        return "Normal Clam"
 
-class Garlic(Veggie):
-    def __call_(self):
-        return "Stank breath"
 
-class Garlic(Veggie):
-    def __call_(self):
-        return "Stank breath"
-
-class FreshClams(object):
+class FreshClams(Clam):
     def __call__(self):
         return "Fresh Clams"
 
@@ -209,4 +222,3 @@ if __name__ == "__main__":
     ginos_sample = ginos_pizza_shop.order_pizza("cheese")
     print(ginos_sample.name)
     print("#" * 15)
-

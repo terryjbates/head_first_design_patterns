@@ -4,12 +4,12 @@ import abc
 class Command(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, execute):
-        assert callable(execute)
-        self.execute = execute
+    def __init__(self, do):
+        assert callable(do)
+        self.do = do
 
     def __call__(self):
-        self.execute()
+        self.do()
 
 
 class LightOnCommand(Command):

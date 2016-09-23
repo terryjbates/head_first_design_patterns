@@ -19,6 +19,45 @@ class LightOnCommand(Command):
         super(LightOnCommand, self).__init__(self.light.on)
 
 
+class LightOffCommand(Command):
+    def __init__(self, light_obj):
+        assert isinstance(light_obj, Light)
+        self.light = light_obj
+        super(LightOffCommand, self).__init__(self.light.off)
+
+
+class Stereo(object):
+    def __init__(self):
+        pass
+
+    def on(self):
+        print("Stereo On")
+
+    def off(self):
+        print("Stereo Off")
+
+    def set_cd(self, cd_choice="Death Grips"):
+        print("Setting CD to {}".format(cd_choice))
+
+    def set_radio(self, radio_station="Hot 97"):
+        print("Tuning station to {}".format(radio_station))
+
+    def set_volume(self, volume_level):
+        print("Setting volume level to {}".format(str(volume_level)))
+
+
+class StereoOnWithCDCommand(Command):
+    def __init__(self, stereo):
+        assert isinstance(stereo, Stereo)
+        self.stereo = stereo
+        super(StereoOnWithCDCommand, self).__init__(self.__call__)
+
+    def __call__(self):
+        self.stereo.on()
+        self.stereo.set_cd()
+        self.stereo.set_volume(11)
+
+
 class GarageDoorOpenCommand(Command):
     def __init__(self, garage_door_obj):
         assert isinstance(garage_door_obj, GarageDoor)
@@ -69,14 +108,44 @@ class SimpleRemoteControl(object):
         self.slot()
 
 
+class RemoteControl(object):
+    def __init__(self):
+        self.__commands = []
+
+    def add(self, command):
+        if not isinstance(command, Command):
+            raise TypeError("Expected object of type Command, got {}".format(type(command).__name__))
+        self.__commands.append(command)
+
+    def __call__(self):
+        for command in self.__commands:
+            command()
+
+    do = __call__
+
+    def undo(self):
+        for command in reversed(self.__commands):
+            command.undo()
+
+
 if __name__ == '__main__':
     remote = SimpleRemoteControl()
     light = Light()
     light_on = LightOnCommand(light)
+    light_off = LightOffCommand(light)
     garage_door = GarageDoor()
     garage_open = GarageDoorOpenCommand(garage_door)
+    funky_stereo = Stereo()
+    stereo_with_cd = StereoOnWithCDCommand(funky_stereo)
 
     remote.set_command(light_on)
     remote.button_was_pressed()
     remote.set_command(garage_open)
     remote.button_was_pressed()
+
+    power_remote = RemoteControl()
+    power_remote.add(light_on)
+    power_remote.add(light_off)
+    power_remote.add(stereo_with_cd)
+
+    power_remote()

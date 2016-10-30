@@ -18,6 +18,9 @@ class LightOnCommand(Command):
         self.light = light_obj
         super(LightOnCommand, self).__init__(self.light.on)
 
+    def undo(self):
+        self.light.off()
+
 
 class LightOffCommand(Command):
     def __init__(self, light_obj):
@@ -25,6 +28,8 @@ class LightOffCommand(Command):
         self.light = light_obj
         super(LightOffCommand, self).__init__(self.light.off)
 
+    def undo(self):
+        self.light.on()
 
 class Stereo(object):
     def __init__(self):
@@ -57,6 +62,9 @@ class StereoOnWithCDCommand(Command):
         self.stereo.set_cd()
         self.stereo.set_volume(11)
 
+    def undo(self):
+        self.stereo.set_volume(0)
+        self.stereo.off()
 
 class GarageDoorOpenCommand(Command):
     def __init__(self, garage_door_obj):
@@ -149,3 +157,4 @@ if __name__ == '__main__':
     power_remote.add(stereo_with_cd)
 
     power_remote()
+    power_remote.undo()
